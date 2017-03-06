@@ -1,0 +1,19 @@
+#!/bin/bash
+
+EXEC_LOC="`dirname "$0"`"
+
+realpath () {
+(
+    echo "$(pwd -P)/$EXEC_LOC"
+)
+}
+
+declare -r real_script_path="$(realpath "$0")"
+
+declare -r app_home="$(realpath "$(dirname "$real_script_path")")"
+
+declare -r lib_dir="$EXEC_LOC/../lib"
+
+${{template_declares}}
+
+exec java -cp $app_classpath $app_mainclass $@
