@@ -20,7 +20,9 @@ object MyGenerator {
 
   val postsFolder = pwd / 'post
   val targetFolder = pwd / 'site
+  val assetsFolder = pwd / 'assets
 
+  val assetFiles = ls ! assetsFolder
   val (markdownFiles, otherFiles) = ls ! postsFolder partition (_.ext == "md")
   markdownFiles.foreach(println)
   // Walk the posts/ folder and parse out the name, full- and first-paragraph-
@@ -144,7 +146,10 @@ object MyGenerator {
       cp(otherFile, targetFolder / 'post / (otherFile relativeTo postsFolder))
     }
 
-    // add static asset files here
+    mkdir ! targetFolder / 'assets
+    for (assetFile <- assetFiles) {
+      cp(assetFile, targetFolder / 'assets / (assetFile relativeTo assetsFolder))
+    }
 
     cp(pwd / "favicon.png", targetFolder / "favicon.ico")
 
