@@ -1,4 +1,6 @@
-package net.truhland.generator;
+package net.truhland.generator
+
+import net.truhland.generator.MyStyles.{NarrowStyles, Styles, WideStyles}
 
 /**
   * @author truhland
@@ -23,40 +25,41 @@ object MyPages {
   }
 
   def pageChrome(titleText: Option[String], unNesting: String, contents: Frag): String = {
-    val pageTitle = titleText.getOrElse("Haoyi's Programming Blog")
+    val pageTitle = titleText.getOrElse("Mostly Rajas")
     val sheets = Seq(
-      "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css",
-      "https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css",
-      "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/github-gist.min.css"
+      "https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css",
+      "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
+      "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/github-gist.min.css"
     )
 
     def icon(s: String) = div(i(cls := s"fa fa-$s"))
 
     val headerLinks = Seq(
       Seq(
-        div(icon("question-circle"), " About") -> s"$unNesting/post/HelloWorldBlog.html",
-        div(icon("file-text"), " Resume") -> "https://lihaoyi.github.io/Resume/",
-        div(icon("github"), " Github") -> "https://github.com/lihaoyi"
+        //div(icon("question-circle"), " About") -> s"$unNesting/post/HelloWorldBlog.html",
+        //div(icon("file-text"), " Resume") -> "https://lihaoyi.github.io/Resume/",
+        //div(icon("github"), " Github") -> "https://github.com/lihaoyi"
       ),
       Seq(
-        div(icon("twitter"), " Twitter") -> s"https://twitter.com/li_haoyi",
+        //div(icon("twitter"), " Twitter") -> s"https://twitter.com/li_haoyi",
         //      div(icon("envelope"), " Subscribe") -> s"https://groups.google.com/forum/#!forum/haoyis-programming-blog/join",
-        div(icon("rss"), "RSS") -> s"$unNesting/feed.xml",
-        div(icon("youtube-play"), " Talks") -> s"$unNesting/post/TalksIveGiven.html"
+        //div(icon("rss"), "RSS") -> s"$unNesting/feed.xml",
+        //div(icon("youtube-play"), " Talks") -> s"$unNesting/post/TalksIveGiven.html"
         //      div() -> ""
       )
     )
     html(
       head(
         meta(charset := "utf-8"),
+        meta(httpEquiv := "X-UA-Compatible", content := "IE=edge"),
         for (sheet <- sheets)
           yield link(href := sheet, rel := "stylesheet", `type` := "text/css"),
         tags2.title(pageTitle),
         tags2.style(s"@media (min-width: 60em) {${WideStyles.styleSheetText}}"),
         tags2.style(s"@media (max-width: 60em) {${NarrowStyles.styleSheetText}}"),
         tags2.style(Styles.styleSheetText),
-        script(src := "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"),
-        script(src := "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/languages/scala.min.js"),
+        script(src := "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"),
+        script(src := "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/languages/scala.min.js"),
         script(raw("hljs.initHighlightingOnLoad();")),
         // This makes media queries work on iphone (???)
         // http://stackoverflow.com/questions/13002731/responsive-design-media-query-not-working-on-iphone

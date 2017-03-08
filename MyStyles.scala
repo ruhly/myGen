@@ -1,4 +1,4 @@
-package net.truhland.generator;
+package net.truhland.generator
 
 /**
   * @author truhland
