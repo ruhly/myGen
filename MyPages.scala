@@ -50,7 +50,7 @@ object MyPages {
                 a(href := "http://www.truhland.net", cls := "navbar-brand", "truhland.net"),
                   ul(cls := "nav navbar-nav",
                     li(a(href := "http://www.truhland.net/blog", "Blog")),
-                    li(a(href := "pages/about.html", "About"))
+                    li(a(href := s"$unNesting/post/HelloWorldBlog.html", "About"))
                   )
               ) // navbar-header
             ) // container
@@ -75,55 +75,12 @@ object MyPages {
 
   val currentTimeText = LocalDate.now.toString
 
-  def commentBox(titleText: String): Frag = Seq(
-    div(id := "disqus_thread"),
-    script(raw(
-      s"""
-      /**
-      * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-      * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-      */
-
-      var disqus_config = function () {
-      this.page.url = "http://www.lihaoyi.com/post/${sanitize(titleText)}.html"; // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "$titleText"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-      };
-
-      (function() { // DON'T EDIT BELOW THIS LINE
-      var d = document, s = d.createElement('script');
-
-      s.src = '//lihaoyi.disqus.com/embed.js';
-
-      s.setAttribute('data-timestamp', +new Date());
-      (d.head || d.body).appendChild(s);
-      })();
-  """))
-  )
-
-  def googleAnalytics: Frag = script(raw(
-    """(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    |(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    |m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    |})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    |
-    |ga('create', 'UA-27464920-5', 'auto');
-    |ga('send', 'pageview');
-  """.
-      stripMargin
-  ))
-
   def forceHttps: Frag = script(raw(
     """if (window.location.protocol == "https:")
       |    window.location.href = "http:" + window.location.href.substring(window.location.protocol.length);
     """.
       stripMargin
   ))
-
-  def metadata(date: String) = div(
-    color := "#999",
-    marginBottom := 20,
-    "Posted ", date
-  )
 
   def mainContent(posts: Seq[(String, String, String, String)]) = pageChrome(
     None
@@ -146,9 +103,9 @@ object MyPages {
             p(raw(rawHtmlSnippet)),
             a(cls := "btn btn-default btn-xs", href := url, "more ...")
           )
-        ), // article
-        hr()
-      }
+        )
+      },
+      hr()
     )
   )
 
@@ -156,9 +113,15 @@ object MyPages {
     Some(name),
     "..",
     Seq[Frag](
-      metadata(date),
-      raw(rawHtmlContent),
-      // commentBox(name)
+      tags2.section(id := "content", cls := "body",
+        span(cls := "published",
+          i(cls := "fa fa-calendar"), s"Posted $date"
+        ),
+        div(cls := "entry-content",
+          raw(rawHtmlContent)
+          // commentBox(name)
+        )
+      )
     )
   )
 
