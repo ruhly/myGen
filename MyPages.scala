@@ -1,7 +1,3 @@
-package net.truhland.generator
-
-import net.truhland.generator.MyStyles.{NarrowStyles, Styles, WideStyles}
-
 /**
   * @author truhland
   */
@@ -11,8 +7,8 @@ object MyPages {
   //import $ivy.`com.lihaoyi::scalatags:0.6.2`
   import java.time.LocalDate
 
-        import scalatags.Text.all._
-        import scalatags.Text.tags2
+  import scalatags.Text.all._
+  import scalatags.Text.tags2
   //import $file.pageStyles, pageStyles._
 
 
@@ -29,97 +25,51 @@ object MyPages {
     val sheets = Seq(
       "https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css",
       "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
-      "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/github-gist.min.css"
-    )
-
-    def icon(s: String) = div(i(cls := s"fa fa-$s"))
-
-    val headerLinks = Seq(
-      Seq(
-        //div(icon("question-circle"), " About") -> s"$unNesting/post/HelloWorldBlog.html",
-        //div(icon("file-text"), " Resume") -> "https://lihaoyi.github.io/Resume/",
-        //div(icon("github"), " Github") -> "https://github.com/lihaoyi"
-      ),
-      Seq(
-        //div(icon("twitter"), " Twitter") -> s"https://twitter.com/li_haoyi",
-        //      div(icon("envelope"), " Subscribe") -> s"https://groups.google.com/forum/#!forum/haoyis-programming-blog/join",
-        //div(icon("rss"), "RSS") -> s"$unNesting/feed.xml",
-        //div(icon("youtube-play"), " Talks") -> s"$unNesting/post/TalksIveGiven.html"
-        //      div() -> ""
-      )
+      "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/github-gist.min.css",
+      "http://www.truhland.net/blog/assets/css/style.css"
     )
     html(
       head(
         meta(charset := "utf-8"),
         meta(httpEquiv := "X-UA-Compatible", content := "IE=edge"),
+        meta(name := "viewport", content := "initial-scale = 1.0,maximum-scale = 1.0"),
         for (sheet <- sheets)
-          yield link(href := sheet, rel := "stylesheet", `type` := "text/css"),
+          yield { link(href := sheet, rel := "stylesheet", `type` := "text/css") },
         tags2.title(pageTitle),
-        tags2.style(s"@media (min-width: 60em) {${WideStyles.styleSheetText}}"),
-        tags2.style(s"@media (max-width: 60em) {${NarrowStyles.styleSheetText}}"),
-        tags2.style(Styles.styleSheetText),
         script(src := "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"),
         script(src := "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/languages/scala.min.js"),
         script(raw("hljs.initHighlightingOnLoad();")),
-        // This makes media queries work on iphone (???)
-        // http://stackoverflow.com/questions/13002731/responsive-design-media-query-not-working-on-iphone
-        meta(name := "viewport", content := "initial-scale = 1.0,maximum-scale = 1.0"),
-        googleAnalytics,
+        //googleAnalytics,
         forceHttps
       ),
       body(
-        margin := 0,
-        div(
-          WideStyles.header,
-          NarrowStyles.header,
-          Styles.header,
-          div(
-            NarrowStyles.headerContent,
-            WideStyles.headerContent,
-            h1(
-              a(
-                i(cls := "fa fa-cogs"),
-                color := "white",
-                " Haoyi's Programming Blog", href := s"$unNesting",
-                Styles.subtleLink,
-                NarrowStyles.flexFont,
-                fontWeight.bold
-              ),
-              padding := "30px 30px",
-              margin := 0
-            ),
-            div(
-              Styles.headerLinkBox,
-              NarrowStyles.linkFlex,
-              // This is necessary otherwise it doesn't seem to render correctly
-              // on iPhone 6S+ Chrome; presumably they have some bug with flexbox
-              // which is making it take up insufficient space.
-              minWidth := 175,
-              for (headerLinksRow <- headerLinks) yield div(
-                display.flex,
-                flexDirection.row,
-                for ((name, url) <- headerLinksRow) yield div(
-                  Styles.headerLink,
-                  a(name, href := url, Styles.subtleLink, color := "white")
-                )
-              )
-            )
-          )
-        ),
-        div(
-          WideStyles.content,
-          NarrowStyles.content,
-          maxWidth := 900,
-          titleText.map(h1(_)),
-          contents
-        ),
-        div(
-          WideStyles.footer,
-          Styles.footer,
-          "Last published ", currentTimeText
-        )
-
-      )
+        div(cls := "wrap",
+          div(cls := "navbar navbar-default navbar-fixed-top", role := "navigation",
+            div(cls := "container",
+              div(cls := "navbar-header",
+                a(href := "http://www.truhland.net", cls := "navbar-brand", "truhland.net"),
+                  ul(cls := "nav navbar-nav",
+                    li(a(href := "http://www.truhland.net/blog", "Blog")),
+                    li(a(href := "pages/about.html", "About"))
+                  )
+              ) // navbar-header
+            ) // container
+          ), // navbar
+          div(cls := "container",
+            div(cls := "row",
+              div(cls := "col-md-9",
+                tags2.section(id := "content",
+                  div(cls := "page-header",
+                    titleText.map(h1(_)),
+                    h3(cls := "small", "techblog")
+                  ), // page header
+                  contents
+                ) // content section
+              ) // col-md-9
+            ) // row
+          ) // container
+        ) // wrap div
+      ) // body
     ).render
   }
 
@@ -182,26 +132,23 @@ object MyPages {
     div(
       for((name, _, rawHtmlSnippet, date) <- posts.reverse) yield {
         val url = s"post/${sanitize(name)}.html"
-        div(
-          h1(a(
-            name,
-            href := url,
-            Styles.subtleLink,
-            color := "rgb(34, 34, 34)"
+        tags2.article(
+          h2(a(href := url, name)),
+          div(cls := "well well-sm",
+            footer(cls := "post-info",
+              span(cls := "label label-default", "Date"),
+              span(cls := "published",
+                i(cls := "fa fa-calendar"), date
+              )
+            ) // .post-info
+          ),
+          div(cls := "summary",
+            p(raw(rawHtmlSnippet)),
+            a(cls := "btn btn-default btn-xs", href := url, "more ...")
           )
-          ),
-          metadata(date),
-          raw(rawHtmlSnippet),
-          a( // Snippet to make comment count appear
-            href:=s"$url#disqus_thread",
-            data.`disqus-identifier`:=name,
-            "Comments"
-          ),
-          hr(margin := "50px 0px 50px 0px")
-        )
-      },
-      // snippet to
-      script(id :="dsq-count-scr", src :="//lihaoyi.disqus.com/count.js", attr("async") :="async")
+        ), // article
+        hr()
+      }
     )
   )
 
@@ -211,7 +158,7 @@ object MyPages {
     Seq[Frag](
       metadata(date),
       raw(rawHtmlContent),
-      commentBox(name)
+      // commentBox(name)
     )
   )
 

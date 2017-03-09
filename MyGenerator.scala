@@ -1,5 +1,3 @@
-package net.truhland.generator
-
 /**
   * @author truhland
   */
@@ -15,9 +13,7 @@ object MyGenerator {
 
   import collection.JavaConverters._
   import scalatags.Text.all._
-  import net.truhland.generator.MyPages._
-  import net.truhland.generator.MyStyles._
-
+  import MyPages._
 
   val postsFolder = pwd / 'post
   val targetFolder = pwd / 'site
