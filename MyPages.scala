@@ -60,14 +60,36 @@ object MyPages {
               div(cls := "col-md-9",
                 tags2.section(id := "content",
                   div(cls := "page-header",
-                    titleText.map(h1(_)),
-                    h3(cls := "small", "techblog")
+                    h1(pageTitle),
+                    if (titleText.isEmpty) h3(cls := "small", "techblog")
+                    else ""
                   ), // page header
                   contents
                 ) // content section
               ) // col-md-9
             ) // row
-          ) // container
+          ), // container
+          footer(
+            div(cls := "container",
+              hr(),
+              div(cls := "row",
+                div(cls := "col-xs-10", raw("&copy; 2017 Tim Ruhland "),
+                    raw("&middot; built with my site generator using "),
+                    a(href := "https://github.com/lihaoyi/blog",
+                      target := "_blank", "Haoyi's Blog"), ", ",
+                    a(href := "http://www.lihaoyi.com/Ammonite",
+                      target := "_blank", "Ammonite"), ", ",
+                    a(href := "http://www.lihaoyi.com/scalatags",
+                      target := "_blank", "ScalaTags"), " and ",
+                    a(href := "http://bootswatch.com",
+                      target := "_blank", "Bootswatch")
+                ),
+                div(cls := "col-xs-2", p(cls := "pull-right",
+                    i(cls := "fa fa-arrow-up"), a(href := "#", "Back to top"))
+                )
+              ) // row div
+            ) // container div
+          ) // footer
         ) // wrap div
       ) // body
     ).render
@@ -95,7 +117,7 @@ object MyPages {
             footer(cls := "post-info",
               span(cls := "label label-default", "Date"),
               span(cls := "published",
-                i(cls := "fa fa-calendar"), date
+                i(cls := "fa fa-calendar"), s" Posted $date"
               )
             ) // .post-info
           ),
@@ -115,7 +137,7 @@ object MyPages {
     Seq[Frag](
       tags2.section(id := "content", cls := "body",
         span(cls := "published",
-          i(cls := "fa fa-calendar"), s"Posted $date"
+          i(cls := "fa fa-calendar"), s" Posted $date"
         ),
         div(cls := "entry-content",
           raw(rawHtmlContent)
