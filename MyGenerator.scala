@@ -3,10 +3,6 @@
   */
 object MyGenerator {
 
-  // Load dependencies
-  //import $ivy.{`org.pegdown:pegdown:1.6.0`, `com.lihaoyi::scalatags:0.6.2`}
-  //import $file.pageStyles, pageStyles._
-  //import $file.pages, pages._
   import ammonite.ops._
   import org.pegdown.ast._
   import org.pegdown.{Extensions, LinkRenderer, PegDownProcessor, ToHtmlSerializer}
