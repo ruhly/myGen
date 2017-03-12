@@ -29,7 +29,7 @@ object MyGenerator {
       val processor = new PegDownProcessor(
         Extensions.FENCED_CODE_BLOCKS | Extensions.TABLES | Extensions.AUTOLINKS
       )
-      val ast = processor.parseMarkdown(read ! path toArray)
+      val ast = processor.parseMarkdown(read(path).toArray)
       class Serializer extends ToHtmlSerializer(new LinkRenderer) {
         override def printImageTag(rendering: LinkRenderer.Rendering) {
           printer.print("<div style=\"text-align: center\"><img")

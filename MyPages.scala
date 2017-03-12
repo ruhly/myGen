@@ -3,8 +3,6 @@
   */
 object MyPages {
 
-
-  //import $ivy.`com.lihaoyi::scalatags:0.6.2`
   import java.time.LocalDate
 
   import scalatags.Text.all._
